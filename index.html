@@ -1,0 +1,2049 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TXL - ติวสอบเข้า ม.1</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800;900&family=Fredoka:wght@400;500;600;700&display=swap');
+
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --primary-dark: #3730a3;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --error: #ef4444;
+            --error-light: #fee2e2;
+            --warning: #f59e0b;
+            --bg: #f0f4ff;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --gold: #fbbf24;
+            --xp-bar: #8b5cf6;
+            --math-color: #3b82f6;
+            --sci-color: #10b981;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans Thai', 'Fredoka', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* === TOP NAV === */
+        .top-nav {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(79,70,229,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav.math-theme {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            box-shadow: 0 4px 20px rgba(59,130,246,0.3);
+        }
+        .top-nav.sci-theme {
+            background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+            box-shadow: 0 4px 20px rgba(16,185,129,0.3);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: -0.5px;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-stats {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .nav-stat .icon { font-size: 1.2rem; }
+
+        /* === MAIN LAYOUT === */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        /* === SUBJECT SELECTION === */
+        .subject-select {
+            text-align: center;
+            padding: 40px 16px;
+        }
+
+        .subject-select h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--xp-bar));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subject-select .subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .subject-card {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 36px 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 3px solid transparent;
+            text-align: center;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        }
+
+        .subject-card.math:hover { border-color: var(--math-color); }
+        .subject-card.sci:hover { border-color: var(--sci-color); }
+
+        .subject-card .emoji {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .subject-card h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subject-card .desc {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .subject-card .q-count {
+            margin-top: 16px;
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .subject-card.math .q-count {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        .subject-card.sci .q-count {
+            background: #d1fae5;
+            color: #047857;
+        }
+
+        /* === SKILL HEADER === */
+        .skill-header {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 28px 32px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .skill-info h1 { font-size: 1.4rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+        .skill-info .subtitle { color: var(--text-light); font-size: 0.9rem; }
+
+        .skill-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #92400e;
+        }
+
+        .back-btn {
+            background: rgba(0,0,0,0.05);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            font-family: 'Noto Sans Thai', 'Fredoka', sans-serif;
+            transition: all 0.2s ease;
+        }
+        .back-btn:hover { background: rgba(0,0,0,0.1); }
+
+        /* === PROGRESS SECTION === */
+        .progress-section {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 24px 32px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .progress-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .progress-label { font-weight: 600; font-size: 0.95rem; color: var(--text); }
+
+        .smart-score { display: flex; align-items: center; gap: 8px; }
+
+        .smart-score-value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--xp-bar));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .smart-score-label { font-size: 0.75rem; color: var(--text-light); font-weight: 500; }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 14px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-light), var(--xp-bar));
+            border-radius: 10px;
+            transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-dots {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+            padding: 0 2px;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .progress-dot {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #94a3b8;
+            transition: all 0.4s ease;
+        }
+
+        .progress-dot.correct { background: var(--success); color: white; box-shadow: 0 2px 8px rgba(16,185,129,0.4); transform: scale(1.1); }
+        .progress-dot.incorrect { background: var(--error); color: white; box-shadow: 0 2px 8px rgba(239,68,68,0.4); }
+        .progress-dot.current { background: var(--primary); color: white; animation: pulse 2s infinite; }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(79,70,229,0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(79,70,229,0); }
+        }
+
+        /* === QUESTION CARD === */
+        .question-card {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-number {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .question-math {
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8fafc, #eef2ff);
+            border-radius: 16px;
+            margin-bottom: 24px;
+            color: var(--primary-dark);
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .question-hint {
+            font-size: 0.85rem;
+            color: var(--warning);
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            padding: 10px 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        /* === OPTIONS === */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .option-btn {
+            padding: 16px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            background: white;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+            font-family: 'Noto Sans Thai', 'Fredoka', sans-serif;
+            color: var(--text);
+            text-align: left;
+            line-height: 1.5;
+        }
+
+        .option-btn:hover:not(.disabled) { border-color: var(--primary-light); background: #f8fafc; transform: translateY(-2px); }
+        .option-btn.correct { border-color: var(--success); background: var(--success-light); color: #065f46; }
+        .option-btn.incorrect { border-color: var(--error); background: var(--error-light); color: #991b1b; }
+        .option-btn.show-correct { border-color: var(--success); background: var(--success-light); color: #065f46; animation: pulseGreen 0.5s ease; }
+        .option-btn.disabled { pointer-events: none; opacity: 0.7; }
+
+        @keyframes pulseGreen {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        .option-letter {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            flex-shrink: 0;
+        }
+
+        /* === INPUT ANSWER === */
+        .input-answer-area { text-align: center; margin-top: 8px; }
+
+        .answer-input {
+            width: 200px;
+            padding: 16px 24px;
+            border: 3px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            font-family: 'Fredoka', sans-serif;
+            transition: all 0.3s ease;
+            outline: none;
+            color: var(--text);
+        }
+
+        .answer-input:focus { border-color: var(--primary-light); box-shadow: 0 0 0 4px rgba(79,70,229,0.1); }
+        .answer-input.correct { border-color: var(--success); background: var(--success-light); }
+        .answer-input.incorrect { border-color: var(--error); background: var(--error-light); }
+
+        .submit-btn {
+            display: block;
+            margin: 16px auto 0;
+            padding: 14px 36px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans Thai', 'Fredoka', sans-serif;
+        }
+
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(79,70,229,0.3); }
+
+        /* === FEEDBACK === */
+        .feedback-area {
+            margin-top: 16px;
+            padding: 20px 24px;
+            border-radius: 16px;
+            display: none;
+            align-items: center;
+            gap: 16px;
+            animation: slideUp 0.3s ease;
+        }
+
+        .feedback-area.show { display: flex; }
+        .feedback-area.correct { background: var(--success-light); border: 2px solid var(--success); }
+        .feedback-area.incorrect { background: var(--error-light); border: 2px solid var(--error); }
+
+        .feedback-icon { font-size: 2.5rem; }
+        .feedback-text .title { font-weight: 700; font-size: 1.1rem; margin-bottom: 4px; }
+        .feedback-text .desc { font-size: 0.9rem; color: var(--text-light); }
+
+        .next-btn {
+            margin-left: auto;
+            padding: 12px 28px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Noto Sans Thai', 'Fredoka', sans-serif;
+            white-space: nowrap;
+        }
+
+        .next-btn:hover { background: #f8fafc; border-color: var(--primary-light); transform: translateY(-2px); }
+
+        /* === EXPLANATION === */
+        .explanation {
+            margin-top: 12px;
+            padding: 20px 24px;
+            background: #fffbeb;
+            border: 2px solid #fde68a;
+            border-radius: 14px;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        .explanation.show { display: block; }
+        .explanation-title { font-weight: 700; color: #92400e; margin-bottom: 8px; font-size: 0.95rem; }
+        .explanation-text { color: #78350f; font-size: 0.9rem; line-height: 1.8; white-space: pre-line; }
+
+        /* === RESULT SCREEN === */
+        .result-screen {
+            display: none;
+            animation: slideUp 0.5s ease;
+        }
+
+        .result-screen.show { display: block; }
+
+        .result-card {
+            background: var(--card);
+            border-radius: 28px;
+            padding: 48px 32px;
+            text-align: center;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+        }
+
+        .result-trophy { font-size: 5rem; margin-bottom: 16px; }
+        .result-title { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
+        .result-subtitle { color: var(--text-light); font-size: 1.1rem; margin-bottom: 32px; }
+
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .result-stat {
+            background: #f8fafc;
+            padding: 20px 16px;
+            border-radius: 16px;
+        }
+
+        .result-stat .value { font-size: 1.8rem; font-weight: 800; color: var(--primary); }
+        .result-stat .label { font-size: 0.8rem; color: var(--text-light); margin-top: 4px; }
+
+        .result-stars { font-size: 2.5rem; margin-bottom: 24px; letter-spacing: 8px; }
+
+        .result-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+        .restart-btn, .home-btn {
+            padding: 16px 36px;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans Thai', 'Fredoka', sans-serif;
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 20px rgba(79,70,229,0.3);
+        }
+        .restart-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(79,70,229,0.4); }
+
+        .home-btn {
+            background: #f1f5f9;
+            color: var(--text);
+        }
+        .home-btn:hover { background: #e2e8f0; transform: translateY(-3px); }
+
+        /* === SOUND TOGGLE === */
+        .sound-toggle {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .sound-toggle:hover { background: rgba(255,255,255,0.3); }
+
+        /* === CONFETTI === */
+        .confetti-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000; overflow: hidden; }
+
+        .confetti {
+            position: absolute;
+            top: -10px;
+            animation: confettiFall linear forwards;
+        }
+
+        @keyframes confettiFall {
+            to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* === STREAK === */
+        .streak-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 20px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            z-index: 200;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            white-space: nowrap;
+        }
+        .streak-popup.show { transform: translate(-50%, -50%) scale(1); }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 640px) {
+            .skill-header { padding: 20px; flex-direction: column; align-items: flex-start; }
+            .question-card { padding: 24px 18px; }
+            .question-math { font-size: 1.4rem; padding: 16px; }
+            .options-grid { grid-template-columns: 1fr; }
+            .progress-section { padding: 16px 20px; }
+            .nav-stats { gap: 12px; }
+            .nav-stat { font-size: 0.8rem; }
+            .result-stats { grid-template-columns: 1fr; }
+            .feedback-area { flex-direction: column; text-align: center; }
+            .subject-select h1 { font-size: 1.5rem; }
+            .subject-grid { grid-template-columns: 1fr; }
+            .result-buttons { flex-direction: column; }
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav" id="topNav">
+    <div class="logo" onclick="goHome()">
+        <div class="logo-icon">📐</div>
+        <span>TXL</span>
+    </div>
+    <div class="nav-stats">
+        <div class="nav-stat">
+            <span class="icon">🔥</span>
+            <span id="streakCount">0</span>
+        </div>
+        <div class="nav-stat">
+            <span class="icon">⭐</span>
+            <span id="xpCount">0 XP</span>
+        </div>
+        <button class="sound-toggle" id="soundToggle" onclick="toggleSound()" title="เปิด/ปิดเสียง">🔊</button>
+    </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main-container">
+
+    <!-- SUBJECT SELECTION -->
+    <div id="subjectSelect" class="subject-select">
+        <h1>ติวสอบเข้า ม.1</h1>
+        <div class="subtitle">เลือกวิชาที่ต้องการฝึกฝน</div>
+        <div class="subject-grid">
+            <div class="subject-card math" onclick="startQuiz('math')">
+                <span class="emoji">🧮</span>
+                <h2>คณิตศาสตร์</h2>
+                <div class="desc">ตัวเลข เศษส่วน ร้อยละ พื้นที่ มุม โจทย์ปัญหา สมการ และอื่นๆ</div>
+                <div class="q-count">20 ข้อ พร้อมเฉลยละเอียด</div>
+            </div>
+            <div class="subject-card sci" onclick="startQuiz('science')">
+                <span class="emoji">🔬</span>
+                <h2>วิทยาศาสตร์</h2>
+                <div class="desc">สิ่งมีชีวิต สสาร แรง พลังงาน โลกและอวกาศ ระบบนิเวศ</div>
+                <div class="q-count">20 ข้อ พร้อมเฉลยละเอียด</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUIZ AREA -->
+    <div id="quizArea" class="hidden">
+        <!-- SKILL HEADER -->
+        <div class="skill-header">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <button class="back-btn" onclick="goHome()">← กลับ</button>
+                <div class="skill-info">
+                    <h1 id="quizTitle"></h1>
+                    <div class="subtitle" id="quizSubtitle"></div>
+                </div>
+            </div>
+            <div class="skill-badge">
+                <span>🎯</span>
+                <span>แนวข้อสอบเข้า ม.1</span>
+            </div>
+        </div>
+
+        <!-- PROGRESS -->
+        <div class="progress-section" id="progressSection">
+            <div class="progress-top">
+                <div class="progress-label">ความก้าวหน้า</div>
+                <div class="smart-score">
+                    <div><div class="smart-score-value" id="scoreDisplay">0</div></div>
+                    <div><div class="smart-score-label">คะแนน</div></div>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+            <div class="progress-dots" id="progressDots"></div>
+        </div>
+
+        <!-- QUESTION AREA -->
+        <div id="questionArea">
+            <div class="question-card" id="questionCard"></div>
+            <div class="feedback-area" id="feedbackArea">
+                <div class="feedback-icon" id="feedbackIcon"></div>
+                <div class="feedback-text">
+                    <div class="title" id="feedbackTitle"></div>
+                    <div class="desc" id="feedbackDesc"></div>
+                </div>
+                <button class="next-btn" id="nextBtn" onclick="nextQuestion()">ข้อถัดไป →</button>
+            </div>
+            <div class="explanation" id="explanationArea">
+                <div class="explanation-title">💡 เฉลยละเอียด</div>
+                <div class="explanation-text" id="explanationText"></div>
+            </div>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div class="result-screen" id="resultScreen">
+            <div class="result-card">
+                <div class="result-trophy" id="resultTrophy">🏆</div>
+                <div class="result-title" id="resultTitle"></div>
+                <div class="result-subtitle" id="resultSubtitle"></div>
+                <div class="result-stars" id="resultStars"></div>
+                <div class="result-stats">
+                    <div class="result-stat">
+                        <div class="value" id="resultCorrect">0</div>
+                        <div class="label">ตอบถูก</div>
+                    </div>
+                    <div class="result-stat">
+                        <div class="value" id="resultXP">0</div>
+                        <div class="label">XP ที่ได้</div>
+                    </div>
+                    <div class="result-stat">
+                        <div class="value" id="resultAccuracy">0%</div>
+                        <div class="label">ความแม่นยำ</div>
+                    </div>
+                </div>
+                <div class="result-buttons">
+                    <button class="restart-btn" onclick="restartQuiz()">🔄 ทำใหม่อีกครั้ง</button>
+                    <button class="home-btn" onclick="goHome()">🏠 เลือกวิชาอื่น</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CONFETTI -->
+<div class="confetti-container" id="confettiContainer"></div>
+<!-- STREAK POPUP -->
+<div class="streak-popup" id="streakPopup"></div>
+
+<script>
+// ========================
+// SOUND ENGINE
+// ========================
+let audioCtx = null;
+let soundEnabled = true;
+
+function getAudioCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+}
+
+function playCorrectSound() {
+    if (!soundEnabled) return;
+    const ctx = getAudioCtx(); const now = ctx.currentTime;
+    [523.25, 659.25, 783.99].forEach((freq, i) => {
+        const osc = ctx.createOscillator(); const gain = ctx.createGain();
+        osc.type = 'sine'; osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.3, now + i * 0.12);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.12 + 0.4);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(now + i * 0.12); osc.stop(now + i * 0.12 + 0.4);
+    });
+}
+
+function playIncorrectSound() {
+    if (!soundEnabled) return;
+    const ctx = getAudioCtx(); const now = ctx.currentTime;
+    const osc = ctx.createOscillator(); const gain = ctx.createGain();
+    osc.type = 'square'; osc.frequency.setValueAtTime(250, now);
+    osc.frequency.linearRampToValueAtTime(180, now + 0.3);
+    gain.gain.setValueAtTime(0.15, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(now); osc.stop(now + 0.35);
+}
+
+function playClickSound() {
+    if (!soundEnabled) return;
+    const ctx = getAudioCtx(); const now = ctx.currentTime;
+    const osc = ctx.createOscillator(); const gain = ctx.createGain();
+    osc.type = 'sine'; osc.frequency.value = 800;
+    gain.gain.setValueAtTime(0.1, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(now); osc.stop(now + 0.08);
+}
+
+function playStreakSound() {
+    if (!soundEnabled) return;
+    const ctx = getAudioCtx(); const now = ctx.currentTime;
+    [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+        const osc = ctx.createOscillator(); const gain = ctx.createGain();
+        osc.type = 'sine'; osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.25, now + i * 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.5);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(now + i * 0.1); osc.stop(now + i * 0.1 + 0.5);
+    });
+}
+
+function playCompleteSound() {
+    if (!soundEnabled) return;
+    const ctx = getAudioCtx(); const now = ctx.currentTime;
+    [523.25, 659.25, 783.99, 1046.5, 783.99, 1046.5].forEach((freq, i) => {
+        const osc = ctx.createOscillator(); const gain = ctx.createGain();
+        osc.type = 'sine'; osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.3, now + i * 0.15);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.15 + 0.5);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(now + i * 0.15); osc.stop(now + i * 0.15 + 0.5);
+    });
+}
+
+function toggleSound() {
+    soundEnabled = !soundEnabled;
+    document.getElementById('soundToggle').textContent = soundEnabled ? '🔊' : '🔇';
+}
+
+// ========================
+// QUESTIONS DATA
+// ========================
+const mathQuestions = [
+    {
+        type: 'choice',
+        text: 'จำนวนใดเป็นจำนวนเฉพาะ (Prime Number)?',
+        options: ['21', '23', '25', '27'],
+        correct: 1,
+        explanation: `จำนวนเฉพาะ คือ จำนวนที่มากกว่า 1 และหารลงตัวได้ด้วย 1 กับตัวมันเองเท่านั้น
+
+ลองตรวจสอบทีละตัว:
+• 21 = 3 × 7 → หารด้วย 3 และ 7 ได้ → ไม่ใช่จำนวนเฉพาะ
+• 23 → ลองหารด้วย 2, 3, 4... ไม่มีจำนวนใดหารลงตัว → เป็นจำนวนเฉพาะ ✓
+• 25 = 5 × 5 → หารด้วย 5 ได้ → ไม่ใช่จำนวนเฉพาะ
+• 27 = 3 × 9 → หารด้วย 3 ได้ → ไม่ใช่จำนวนเฉพาะ
+
+คำตอบคือ 23`
+    },
+    {
+        type: 'choice',
+        text: 'ค.ร.น. (ตัวคูณร่วมน้อย) ของ 12 และ 18 คือข้อใด?',
+        options: ['24', '36', '48', '72'],
+        correct: 1,
+        explanation: `ค.ร.น. (LCM) คือ จำนวนที่น้อยที่สุดที่หารด้วยทั้ง 12 และ 18 ลงตัว
+
+วิธีทำ: แยกตัวประกอบเฉพาะ
+• 12 = 2 × 2 × 3 = 2² × 3
+• 18 = 2 × 3 × 3 = 2 × 3²
+
+ค.ร.น. = เอาตัวประกอบทุกตัว เลือกเลขยกกำลังสูงสุด
+= 2² × 3² = 4 × 9 = 36
+
+ตรวจสอบ: 36 ÷ 12 = 3 ✓ และ 36 ÷ 18 = 2 ✓
+
+คำตอบคือ 36`
+    },
+    {
+        type: 'choice',
+        text: 'ผลลัพธ์ของ 3/4 + 2/5 เท่ากับเท่าไร?',
+        math: '3/4 + 2/5 = ?',
+        options: ['5/9', '23/20', '1 3/20', '7/10'],
+        correct: 2,
+        explanation: `การบวกเศษส่วนต่างส่วน ต้องทำส่วนให้เท่ากันก่อน
+
+ขั้นที่ 1: หา ค.ร.น. ของส่วน (4 กับ 5)
+ค.ร.น. ของ 4 และ 5 = 20
+
+ขั้นที่ 2: ทำส่วนให้เป็น 20
+• 3/4 = (3×5)/(4×5) = 15/20
+• 2/5 = (2×4)/(5×4) = 8/20
+
+ขั้นที่ 3: บวกเศษ
+15/20 + 8/20 = 23/20
+
+ขั้นที่ 4: เปลี่ยนเป็นจำนวนคละ
+23/20 = 1 เศษ 3 = 1 3/20
+
+คำตอบคือ 1 3/20`
+    },
+    {
+        type: 'choice',
+        text: 'ร้านค้าลดราคาสินค้า 20% จากราคาเดิม 450 บาท ต้องจ่ายเงินเท่าไร?',
+        options: ['350 บาท', '360 บาท', '370 บาท', '380 บาท'],
+        correct: 1,
+        explanation: `วิธีคิด: หาส่วนลดก่อน แล้วเอาราคาเดิมลบส่วนลด
+
+ขั้นที่ 1: หาส่วนลด
+ส่วนลด = 20% ของ 450
+= (20/100) × 450
+= 0.20 × 450 = 90 บาท
+
+ขั้นที่ 2: หาราคาที่ต้องจ่าย
+ราคาที่ต้องจ่าย = 450 - 90 = 360 บาท
+
+วิธีลัด: ลด 20% = จ่าย 80%
+= (80/100) × 450 = 360 บาท
+
+คำตอบคือ 360 บาท`
+    },
+    {
+        type: 'choice',
+        text: 'สามเหลี่ยมมีมุมสองมุมเป็น 45° และ 65° มุมที่สามมีค่าเท่าไร?',
+        math: '45° + 65° + ? = 180°',
+        options: ['60°', '70°', '80°', '90°'],
+        correct: 1,
+        explanation: `กฎสำคัญ: มุมภายในของสามเหลี่ยมรวมกันได้ 180° เสมอ
+
+วิธีทำ:
+มุมที่ 1 + มุมที่ 2 + มุมที่ 3 = 180°
+45° + 65° + มุมที่ 3 = 180°
+110° + มุมที่ 3 = 180°
+มุมที่ 3 = 180° - 110° = 70°
+
+ตรวจสอบ: 45° + 65° + 70° = 180° ✓
+
+คำตอบคือ 70°`
+    },
+    {
+        type: 'choice',
+        text: 'สนามรูปสี่เหลี่ยมผืนผ้า กว้าง 25 เมตร ยาว 40 เมตร มีพื้นที่กี่ตารางเมตร?',
+        options: ['130 ตร.ม.', '650 ตร.ม.', '1,000 ตร.ม.', '1,200 ตร.ม.'],
+        correct: 2,
+        explanation: `สูตรพื้นที่สี่เหลี่ยมผืนผ้า = กว้าง × ยาว
+
+วิธีทำ:
+พื้นที่ = 25 × 40 = 1,000 ตารางเมตร
+
+เคล็ดลับคูณเลขลงท้าย 0:
+25 × 40 = 25 × 4 × 10 = 100 × 10 = 1,000
+
+(อย่าสับสนกับ "เส้นรอบรูป" ซึ่ง = 2 × (กว้าง + ยาว) = 2 × 65 = 130)
+
+คำตอบคือ 1,000 ตารางเมตร`
+    },
+    {
+        type: 'choice',
+        text: 'แม่ค้ามีไข่ 15 โหล ขายไป 87 ฟอง เหลือไข่กี่ฟอง?',
+        options: ['83 ฟอง', '90 ฟอง', '93 ฟอง', '95 ฟอง'],
+        correct: 2,
+        explanation: `ขั้นที่ 1: แปลง "โหล" เป็น "ฟอง"
+1 โหล = 12 ฟอง (ต้องจำให้ได้!)
+15 โหล = 15 × 12 = 180 ฟอง
+
+ขั้นที่ 2: หาจำนวนที่เหลือ
+เหลือ = 180 - 87 = 93 ฟอง
+
+เทคนิคคูณ 15 × 12:
+= 15 × 10 + 15 × 2
+= 150 + 30 = 180
+
+คำตอบคือ 93 ฟอง`
+    },
+    {
+        type: 'input',
+        text: 'ค่าเฉลี่ยของ 12, 18, 24, 30 และ 36 คือเท่าไร?',
+        math: '(12+18+24+30+36) ÷ 5 = ?',
+        answer: '24',
+        explanation: `ค่าเฉลี่ย = ผลรวมทั้งหมด ÷ จำนวนข้อมูล
+
+ขั้นที่ 1: บวกตัวเลขทุกตัว
+12 + 18 + 24 + 30 + 36 = 120
+
+(เคล็ดลับ: บวกคู่ที่ได้ 48 → 12+36=48, 18+30=48 → 48+48+24 = 120)
+
+ขั้นที่ 2: หารด้วยจำนวนข้อมูล
+มีข้อมูล 5 ตัว
+120 ÷ 5 = 24
+
+คำตอบคือ 24`
+    },
+    {
+        type: 'choice',
+        text: 'จำนวนใดหารด้วย 3 ลงตัว?',
+        options: ['142', '253', '375', '418'],
+        correct: 2,
+        explanation: `เคล็ดลับ: จำนวนหารด้วย 3 ลงตัว ถ้าผลรวมของตัวเลขทุกหลักหารด้วย 3 ลงตัว
+
+ตรวจสอบ:
+• 142 → 1+4+2 = 7 → 7÷3 ไม่ลงตัว ✗
+• 253 → 2+5+3 = 10 → 10÷3 ไม่ลงตัว ✗
+• 375 → 3+7+5 = 15 → 15÷3 = 5 ลงตัว ✓
+• 418 → 4+1+8 = 13 → 13÷3 ไม่ลงตัว ✗
+
+คำตอบคือ 375`
+    },
+    {
+        type: 'choice',
+        text: 'ถ้า x + 15 = 42 แล้ว x มีค่าเท่าไร?',
+        math: 'x + 15 = 42',
+        options: ['22', '27', '32', '57'],
+        correct: 1,
+        explanation: `วิธีแก้สมการ: ย้ายข้างเปลี่ยนเครื่องหมาย
+
+x + 15 = 42
+
+ย้าย +15 ไปอีกข้าง เปลี่ยนเป็น -15:
+x = 42 - 15
+x = 27
+
+ตรวจสอบ: แทน x = 27 กลับในสมการ
+27 + 15 = 42 ✓ ถูกต้อง!
+
+คำตอบคือ 27`
+    },
+    {
+        type: 'choice',
+        text: 'รถยนต์วิ่งด้วยความเร็ว 80 กิโลเมตรต่อชั่วโมง ใช้เวลา 3 ชั่วโมง 30 นาที จะวิ่งได้ระยะทางเท่าไร?',
+        options: ['240 กม.', '260 กม.', '280 กม.', '300 กม.'],
+        correct: 2,
+        explanation: `สูตร: ระยะทาง = ความเร็ว × เวลา
+
+ขั้นที่ 1: แปลงเวลาให้เป็นชั่วโมง
+3 ชั่วโมง 30 นาที = 3.5 ชั่วโมง
+(เพราะ 30 นาที = 30/60 = 0.5 ชั่วโมง)
+
+ขั้นที่ 2: คำนวณระยะทาง
+ระยะทาง = 80 × 3.5
+= 80 × 3 + 80 × 0.5
+= 240 + 40
+= 280 กิโลเมตร
+
+คำตอบคือ 280 กิโลเมตร`
+    },
+    {
+        type: 'input',
+        text: 'ผลลัพธ์ของ 2.5 × 0.4 เท่ากับเท่าไร?',
+        math: '2.5 × 0.4 = ?',
+        answer: '1',
+        explanation: `วิธีคูณทศนิยม:
+
+วิธีที่ 1: คูณแบบเลขจำนวนเต็ม แล้วใส่จุดทศนิยม
+25 × 4 = 100
+นับจุดทศนิยม: 2.5 มี 1 ตำแหน่ง, 0.4 มี 1 ตำแหน่ง
+รวม = 2 ตำแหน่ง
+ใส่จุด: 100 → 1.00 = 1
+
+วิธีที่ 2: เปลี่ยนเป็นเศษส่วน
+2.5 × 0.4 = 5/2 × 2/5 = 10/10 = 1
+
+คำตอบคือ 1`
+    },
+    {
+        type: 'choice',
+        text: 'วงกลมมีรัศมี 7 เซนติเมตร เส้นรอบวงยาวเท่าไร? (ใช้ π = 22/7)',
+        options: ['22 ซม.', '44 ซม.', '88 ซม.', '154 ซม.'],
+        correct: 1,
+        explanation: `สูตรเส้นรอบวง = 2 × π × รัศมี (r)
+
+วิธีทำ:
+เส้นรอบวง = 2 × (22/7) × 7
+= 2 × 22/7 × 7
+= 2 × 22 (ตัด 7 ได้)
+= 44 เซนติเมตร
+
+จำไว้:
+• เส้นรอบวง = 2πr
+• พื้นที่วงกลม = πr²
+(อย่าสับสนกัน!)
+
+คำตอบคือ 44 เซนติเมตร`
+    },
+    {
+        type: 'choice',
+        text: 'เรียงลำดับเศษส่วนจากน้อยไปมาก: 2/3, 3/4, 1/2, 5/6',
+        options: [
+            '1/2, 2/3, 3/4, 5/6',
+            '2/3, 1/2, 3/4, 5/6',
+            '1/2, 3/4, 2/3, 5/6',
+            '5/6, 3/4, 2/3, 1/2'
+        ],
+        correct: 0,
+        explanation: `วิธีเปรียบเทียบเศษส่วน: ทำส่วนให้เท่ากัน
+
+หา ค.ร.น. ของ 3, 4, 2, 6 = 12
+
+แปลงเศษส่วนให้ส่วนเป็น 12:
+• 1/2 = 6/12
+• 2/3 = 8/12
+• 3/4 = 9/12
+• 5/6 = 10/12
+
+เรียงจากน้อยไปมาก:
+6/12 < 8/12 < 9/12 < 10/12
+= 1/2 < 2/3 < 3/4 < 5/6
+
+คำตอบคือ 1/2, 2/3, 3/4, 5/6`
+    },
+    {
+        type: 'choice',
+        text: 'นักเรียน 40 คน สอบผ่าน 32 คน คิดเป็นร้อยละเท่าไร?',
+        options: ['72%', '75%', '78%', '80%'],
+        correct: 3,
+        explanation: `สูตรร้อยละ = (จำนวนที่ต้องการ / จำนวนทั้งหมด) × 100
+
+วิธีทำ:
+ร้อยละ = (32/40) × 100
+
+ขั้นที่ 1: หาร 32 ÷ 40 = 0.8
+ขั้นที่ 2: คูณ 0.8 × 100 = 80%
+
+วิธีลัด: ทำเศษส่วนให้ส่วนเป็น 100
+32/40 = 80/100 = 80%
+(คูณทั้งเศษและส่วนด้วย 2.5)
+
+คำตอบคือ 80%`
+    },
+    {
+        type: 'input',
+        text: 'พ่อค้าซื้อส้ม 8 กิโลกรัม กิโลกรัมละ 35 บาท และขายทั้งหมดในราคากิโลกรัมละ 50 บาท พ่อค้าได้กำไรทั้งหมดกี่บาท?',
+        answer: '120',
+        explanation: `ขั้นที่ 1: หาต้นทุน (ราคาซื้อ)
+ต้นทุน = 8 × 35 = 280 บาท
+
+ขั้นที่ 2: หารายได้ (ราคาขาย)
+รายได้ = 8 × 50 = 400 บาท
+
+ขั้นที่ 3: หากำไร
+กำไร = รายได้ - ต้นทุน
+= 400 - 280
+= 120 บาท
+
+วิธีลัด: กำไรต่อกิโลกรัม = 50 - 35 = 15 บาท
+กำไรทั้งหมด = 15 × 8 = 120 บาท
+
+คำตอบคือ 120 บาท`
+    },
+    {
+        type: 'choice',
+        text: 'ก๊อกน้ำ A เปิดเต็มอ่างใน 6 ชั่วโมง ก๊อกน้ำ B เปิดเต็มอ่างใน 3 ชั่วโมง ถ้าเปิดทั้งสองก๊อกพร้อมกัน จะเต็มอ่างในกี่ชั่วโมง?',
+        options: ['1 ชม.', '2 ชม.', '3 ชม.', '4.5 ชม.'],
+        correct: 1,
+        explanation: `ใช้หลักการ "งาน" (Work Problem)
+
+ขั้นที่ 1: หาอัตราการทำงานต่อชั่วโมง
+• ก๊อก A ทำได้ 1/6 ของอ่างต่อชั่วโมง
+• ก๊อก B ทำได้ 1/3 ของอ่างต่อชั่วโมง
+
+ขั้นที่ 2: รวมอัตราการทำงาน
+เปิดพร้อมกัน = 1/6 + 1/3
+= 1/6 + 2/6
+= 3/6 = 1/2 ของอ่างต่อชั่วโมง
+
+ขั้นที่ 3: หาเวลาเต็มอ่าง
+ทำได้ 1/2 ต่อชั่วโมง → เต็มอ่างใน 2 ชั่วโมง
+
+คำตอบคือ 2 ชั่วโมง`
+    },
+    {
+        type: 'choice',
+        text: 'จำนวนใดอยู่ในรูปแบบ (pattern) ที่ถูกต้อง: 2, 6, 18, 54, ___',
+        options: ['108', '126', '162', '180'],
+        correct: 2,
+        explanation: `หาแบบรูป (Pattern):
+
+ดูความสัมพันธ์ระหว่างจำนวน:
+• 2 → 6 (×3)
+• 6 → 18 (×3)
+• 18 → 54 (×3)
+
+แบบรูป: คูณด้วย 3 ทุกครั้ง
+
+จำนวนถัดไป = 54 × 3 = 162
+
+ตรวจสอบ: 2, 6, 18, 54, 162 → คูณ 3 ทุกตัว ✓
+
+คำตอบคือ 162`
+    },
+    {
+        type: 'input',
+        text: 'เส้นรอบรูปของสี่เหลี่ยมจัตุรัสที่มีพื้นที่ 64 ตารางเซนติเมตร เท่ากับกี่เซนติเมตร?',
+        math: 'พื้นที่ = 64 ตร.ซม. → เส้นรอบรูป = ?',
+        answer: '32',
+        explanation: `ขั้นที่ 1: หาความยาวด้าน
+สี่เหลี่ยมจัตุรัส → ทุกด้านยาวเท่ากัน
+พื้นที่ = ด้าน × ด้าน = ด้าน²
+
+ด้าน² = 64
+ด้าน = √64 = 8 ซม.
+(เพราะ 8 × 8 = 64)
+
+ขั้นที่ 2: หาเส้นรอบรูป
+สี่เหลี่ยมจัตุรัสมี 4 ด้านเท่ากัน
+เส้นรอบรูป = 4 × ด้าน = 4 × 8 = 32 ซม.
+
+คำตอบคือ 32 เซนติเมตร`
+    },
+    {
+        type: 'choice',
+        text: 'มีลูกบอลสีแดง 3 ลูก สีน้ำเงิน 5 ลูก สีเขียว 2 ลูก ในถุง ถ้าหยิบมา 1 ลูก โอกาสที่จะได้ลูกบอลสีน้ำเงินคือข้อใด?',
+        options: ['1/5', '3/10', '1/2', '5/8'],
+        correct: 2,
+        explanation: `สูตรความน่าจะเป็น = จำนวนที่ต้องการ / จำนวนทั้งหมด
+
+ขั้นที่ 1: หาจำนวนทั้งหมด
+ทั้งหมด = 3 + 5 + 2 = 10 ลูก
+
+ขั้นที่ 2: คำนวณความน่าจะเป็น
+ต้องการสีน้ำเงิน มี 5 ลูก
+ความน่าจะเป็น = 5/10 = 1/2
+
+แปลเป็นภาษาง่ายๆ:
+= มีโอกาส 1 ใน 2 หรือ 50% ที่จะหยิบได้สีน้ำเงิน
+
+คำตอบคือ 1/2`
+    }
+];
+
+const scienceQuestions = [
+    {
+        type: 'choice',
+        text: 'อวัยวะใดทำหน้าที่กรองของเสียออกจากเลือด?',
+        options: ['ตับ', 'ไต', 'ปอด', 'ม้าม'],
+        correct: 1,
+        explanation: `ไต (Kidney) ทำหน้าที่กรองของเสียออกจากเลือด
+
+อธิบายง่ายๆ:
+เลือดจะไหลผ่านไต → ไตจะกรองเอาของเสีย เช่น ยูเรีย และน้ำส่วนเกินออก → กลายเป็นปัสสาวะ → ส่งไปเก็บที่กระเพาะปัสสาวะ
+
+อวัยวะอื่นทำอะไร?
+• ตับ → กำจัดสารพิษ ผลิตน้ำดี
+• ปอด → แลกเปลี่ยนแก๊ส (หายใจ)
+• ม้าม → กำจัดเม็ดเลือดแดงที่หมดอายุ
+
+คำตอบคือ ไต`
+    },
+    {
+        type: 'choice',
+        text: 'การสังเคราะห์ด้วยแสง (Photosynthesis) ต้องใช้สิ่งใดบ้าง?',
+        options: [
+            'แสงแดด + น้ำ + ออกซิเจน',
+            'แสงแดด + น้ำ + คาร์บอนไดออกไซด์',
+            'แสงแดด + ออกซิเจน + แร่ธาตุ',
+            'น้ำ + ออกซิเจน + แร่ธาตุ'
+        ],
+        correct: 1,
+        explanation: `การสังเคราะห์ด้วยแสง คือ การที่พืชทำอาหารเอง
+
+สูตรจำง่ายๆ:
+แสงแดด + น้ำ + คาร์บอนไดออกไซด์ → น้ำตาล + ออกซิเจน
+
+อธิบาย:
+• พืชดูดน้ำจากราก
+• ใบพืชรับคาร์บอนไดออกไซด์ (CO₂) จากอากาศ
+• คลอโรฟิลล์ในใบดูดแสงแดด
+• รวมกัน → ได้น้ำตาล (อาหาร) + ปล่อยออกซิเจน (O₂) ออกมา
+
+จำไว้: ออกซิเจนเป็น "ผลผลิต" ไม่ใช่ "วัตถุดิบ"
+
+คำตอบคือ แสงแดด + น้ำ + คาร์บอนไดออกไซด์`
+    },
+    {
+        type: 'choice',
+        text: 'ข้อใดเป็นการเปลี่ยนแปลงทางเคมี?',
+        options: [
+            'น้ำแข็งละลายเป็นน้ำ',
+            'ตัดกระดาษเป็นชิ้นเล็ก',
+            'เหล็กเป็นสนิม',
+            'น้ำระเหยเป็นไอน้ำ'
+        ],
+        correct: 2,
+        explanation: `การเปลี่ยนแปลงทางเคมี = เกิดสารใหม่ที่ต่างจากเดิม กลับคืนสภาพเดิมไม่ได้
+
+• น้ำแข็งละลาย → ยังเป็นน้ำ (H₂O) เหมือนเดิม → เปลี่ยนแปลงทางกายภาพ
+• ตัดกระดาษ → ยังเป็นกระดาษเหมือนเดิม → เปลี่ยนแปลงทางกายภาพ
+• เหล็กเป็นสนิม → เหล็ก (Fe) รวมกับออกซิเจน (O₂) กลายเป็นสนิมเหล็ก (Fe₂O₃) → เกิดสารใหม่! → เปลี่ยนแปลงทางเคมี ✓
+• น้ำระเหย → ยังเป็นน้ำ (H₂O) เหมือนเดิม → เปลี่ยนแปลงทางกายภาพ
+
+คำตอบคือ เหล็กเป็นสนิม`
+    },
+    {
+        type: 'choice',
+        text: 'ดาวเคราะห์ดวงใดอยู่ใกล้ดวงอาทิตย์มากที่สุด?',
+        options: ['ดาวศุกร์', 'โลก', 'ดาวพุธ', 'ดาวอังคาร'],
+        correct: 2,
+        explanation: `ลำดับดาวเคราะห์จากใกล้ดวงอาทิตย์ไปไกล:
+
+1. ดาวพุธ (Mercury) ← ใกล้ที่สุด!
+2. ดาวศุกร์ (Venus)
+3. โลก (Earth)
+4. ดาวอังคาร (Mars)
+5. ดาวพฤหัสบดี (Jupiter)
+6. ดาวเสาร์ (Saturn)
+7. ดาวยูเรนัส (Uranus)
+8. ดาวเนปจูน (Neptune)
+
+เทคนิคจำ: "พุธ ศุกร์ โลก อังคาร พฤหัส เสาร์ ยูเรนัส เนปจูน"
+ท่อง: "พุ ศุ โล อัง พฤ สา ยู เน"
+
+คำตอบคือ ดาวพุธ`
+    },
+    {
+        type: 'choice',
+        text: 'สิ่งมีชีวิตใดเป็นผู้ผลิต (Producer) ในห่วงโซ่อาหาร?',
+        options: ['กระต่าย', 'หญ้า', 'งู', 'เหยี่ยว'],
+        correct: 1,
+        explanation: `ในห่วงโซ่อาหาร:
+
+ผู้ผลิต (Producer) = สิ่งมีชีวิตที่สร้างอาหารเองได้ = พืช
+→ หญ้าสร้างอาหารเองโดยการสังเคราะห์ด้วยแสง ✓
+
+ผู้บริโภค (Consumer):
+• ผู้บริโภคลำดับที่ 1 = กินพืช → กระต่าย
+• ผู้บริโภคลำดับที่ 2 = กินสัตว์กินพืช → งู
+• ผู้บริโภคลำดับที่ 3 = นักล่าชั้นบน → เหยี่ยว
+
+ห่วงโซ่: หญ้า → กระต่าย → งู → เหยี่ยว
+
+คำตอบคือ หญ้า`
+    },
+    {
+        type: 'choice',
+        text: 'แก๊สใดในอากาศมีปริมาณมากที่สุด?',
+        options: ['ออกซิเจน', 'คาร์บอนไดออกไซด์', 'ไนโตรเจน', 'ไฮโดรเจน'],
+        correct: 2,
+        explanation: `องค์ประกอบของอากาศ:
+
+• ไนโตรเจน (N₂) = ประมาณ 78% ← มากที่สุด!
+• ออกซิเจน (O₂) = ประมาณ 21%
+• อาร์กอน (Ar) = ประมาณ 0.9%
+• คาร์บอนไดออกไซด์ (CO₂) = ประมาณ 0.04%
+
+หลายคนเข้าใจผิดว่าออกซิเจนมีมากที่สุด
+แต่จริงๆ ไนโตรเจนมีมากกว่าออกซิเจนเกือบ 4 เท่า!
+
+เทคนิคจำ: "ไนโตรเจน 78, ออกซิเจน 21" (78+21 = 99% แล้ว!)
+
+คำตอบคือ ไนโตรเจน`
+    },
+    {
+        type: 'choice',
+        text: 'ข้อใดเป็นตัวนำไฟฟ้า?',
+        options: ['ไม้', 'แก้ว', 'ทองแดง', 'ยาง'],
+        correct: 2,
+        explanation: `ตัวนำไฟฟ้า = วัสดุที่กระแสไฟฟ้าไหลผ่านได้ดี
+
+โลหะเป็นตัวนำไฟฟ้าที่ดี เพราะมีอิเล็กตรอนอิสระเคลื่อนที่ได้ง่าย
+
+ตัวนำไฟฟ้า: ทองแดง ✓, เงิน, ทอง, อะลูมิเนียม, เหล็ก
+ฉนวนไฟฟ้า (ไม่นำไฟฟ้า): ไม้ ✗, แก้ว ✗, ยาง ✗, พลาสติก ✗
+
+ทองแดงนิยมใช้ทำสายไฟ เพราะนำไฟฟ้าได้ดีและราคาไม่แพงมาก
+
+คำตอบคือ ทองแดง`
+    },
+    {
+        type: 'choice',
+        text: 'การแยกสารผสมระหว่างทรายกับเกลือ ควรใช้วิธีใด?',
+        options: [
+            'ใช้แม่เหล็กดูด',
+            'ละลายน้ำ กรอง แล้วระเหย',
+            'ใช้ตะแกรงร่อน',
+            'ใช้การกลั่น'
+        ],
+        correct: 1,
+        explanation: `วิธีแยกทรายกับเกลือ:
+
+ขั้นที่ 1: ละลายน้ำ
+→ เกลือละลายน้ำได้ แต่ทรายไม่ละลาย
+
+ขั้นที่ 2: กรอง
+→ ทรายจะค้างอยู่บนกระดาษกรอง (ได้ทรายแยกออก)
+→ น้ำเกลือจะไหลผ่านกระดาษกรอง
+
+ขั้นที่ 3: ระเหย
+→ ต้มน้ำเกลือให้น้ำระเหยออก จะเหลือเกลือ
+
+ทำไมวิธีอื่นไม่ได้?
+• แม่เหล็ก → ทรายและเกลือไม่ถูกดูดด้วยแม่เหล็ก
+• ตะแกรง → ทรายและเกลือเม็ดเล็กใกล้เคียงกัน ร่อนไม่ได้
+• การกลั่น → ใช้แยกของเหลว ไม่ใช่ของแข็ง
+
+คำตอบคือ ละลายน้ำ กรอง แล้วระเหย`
+    },
+    {
+        type: 'choice',
+        text: 'แรงใดทำให้ดวงจันทร์โคจรรอบโลก?',
+        options: ['แรงเสียดทาน', 'แรงโน้มถ่วง', 'แรงแม่เหล็ก', 'แรงลม'],
+        correct: 1,
+        explanation: `แรงโน้มถ่วง (Gravity) เป็นแรงดึงดูดระหว่างวัตถุที่มีมวล
+
+อธิบายง่ายๆ:
+โลกมีมวลมาก → สร้างแรงโน้มถ่วงดึงดูดดวงจันทร์ → ทำให้ดวงจันทร์โคจรรอบโลก
+
+เปรียบเทียบ: เหมือนผูกลูกบอลกับเชือกแล้วหมุน
+แรงโน้มถ่วงทำหน้าที่เหมือน "เชือก" ที่ดึงดวงจันทร์ไว้
+
+แรงโน้มถ่วงยังทำให้:
+• แอปเปิ้ลตกลงพื้น
+• โลกโคจรรอบดวงอาทิตย์
+• เราเดินอยู่บนพื้นโลกได้
+
+คำตอบคือ แรงโน้มถ่วง`
+    },
+    {
+        type: 'choice',
+        text: 'เซลล์พืชต่างจากเซลล์สัตว์อย่างไร?',
+        options: [
+            'เซลล์พืชมีนิวเคลียส แต่เซลล์สัตว์ไม่มี',
+            'เซลล์พืชมีผนังเซลล์และคลอโรพลาสต์',
+            'เซลล์สัตว์มีขนาดใหญ่กว่าเซลล์พืช',
+            'เซลล์สัตว์ไม่มีเยื่อหุ้มเซลล์'
+        ],
+        correct: 1,
+        explanation: `สิ่งที่เซลล์พืชมี แต่เซลล์สัตว์ไม่มี:
+
+1. ผนังเซลล์ (Cell Wall)
+   → อยู่ด้านนอกสุด ทำให้เซลล์แข็งแรง เป็นรูปร่างเหลี่ยม
+
+2. คลอโรพลาสต์ (Chloroplast)
+   → มีสีเขียว (คลอโรฟิลล์) ใช้สังเคราะห์ด้วยแสง
+
+3. แวคิวโอลขนาดใหญ่
+   → เก็บน้ำและสารอาหาร
+
+สิ่งที่ทั้งสองมีเหมือนกัน:
+• นิวเคลียส (ศูนย์ควบคุมเซลล์)
+• เยื่อหุ้มเซลล์
+• ไมโทคอนเดรีย
+
+คำตอบคือ เซลล์พืชมีผนังเซลล์และคลอโรพลาสต์`
+    },
+    {
+        type: 'choice',
+        text: 'วัฏจักรน้ำ ขั้นตอนใดเกิดขึ้นเมื่อไอน้ำเย็นลงและกลายเป็นหยดน้ำ?',
+        options: ['การระเหย', 'การควบแน่น', 'การตกตะกอน', 'การซึมผ่าน'],
+        correct: 1,
+        explanation: `วัฏจักรน้ำ (Water Cycle):
+
+1. การระเหย (Evaporation)
+   → น้ำเปลี่ยนเป็นไอน้ำ (ของเหลว → แก๊ส)
+
+2. การควบแน่น (Condensation) ← คำตอบ!
+   → ไอน้ำเย็นลง กลายเป็นหยดน้ำเล็กๆ (แก๊ส → ของเหลว)
+   → ตัวอย่าง: เมฆ, หยดน้ำบนแก้วน้ำเย็น
+
+3. การตกตะกอน (Precipitation)
+   → น้ำตกลงมาเป็นฝน หิมะ ลูกเห็บ
+
+4. การซึมผ่าน
+   → น้ำซึมลงดิน
+
+ง่ายๆ: ร้อน=ระเหย, เย็น=ควบแน่น
+
+คำตอบคือ การควบแน่น`
+    },
+    {
+        type: 'choice',
+        text: 'พลังงานในข้อใดเป็นพลังงานหมุนเวียน (Renewable Energy)?',
+        options: [
+            'ถ่านหิน',
+            'น้ำมันดิบ',
+            'พลังงานแสงอาทิตย์',
+            'แก๊สธรรมชาติ'
+        ],
+        correct: 2,
+        explanation: `พลังงานหมุนเวียน = ใช้แล้วไม่หมดไป สามารถเกิดขึ้นใหม่ได้
+
+พลังงานหมุนเวียน:
+• แสงอาทิตย์ ✓ → มีทุกวัน ไม่มีวันหมด
+• ลม → พัดอยู่เรื่อยๆ
+• น้ำ (พลังน้ำ)
+• ชีวมวล (เศษพืช ขยะ)
+
+พลังงานไม่หมุนเวียน (ใช้แล้วหมดไป):
+• ถ่านหิน ✗ → ใช้เวลาหลายล้านปีเกิดขึ้น
+• น้ำมันดิบ ✗ → เกิดจากซากสิ่งมีชีวิตโบราณ
+• แก๊สธรรมชาติ ✗ → มีจำกัด
+
+คำตอบคือ พลังงานแสงอาทิตย์`
+    },
+    {
+        type: 'choice',
+        text: 'เมื่อส่องแสงไฟผ่านปริซึม จะเกิดอะไรขึ้น?',
+        options: [
+            'แสงหายไป',
+            'แสงสะท้อนกลับหมด',
+            'แสงแยกเป็นสีรุ้ง 7 สี',
+            'แสงเปลี่ยนเป็นสีขาวสว่างขึ้น'
+        ],
+        correct: 2,
+        explanation: `แสงขาว (แสงอาทิตย์หรือแสงไฟ) ที่เราเห็น จริงๆ แล้วเกิดจากแสงหลายสีรวมกัน
+
+เมื่อแสงขาวผ่านปริซึม (แท่งแก้วสามเหลี่ยม):
+→ แสงแต่ละสีหักเหต่างมุมกัน
+→ แสงจึงแยกออกเป็น 7 สี เรียกว่า "สเปกตรัม"
+
+7 สีของแสง (เรียงตามลำดับ):
+🔴 แดง 🟠 ส้ม 🟡 เหลือง 🟢 เขียว 🔵 น้ำเงิน 💜 คราม ม่วง
+
+เทคนิคจำ: "แดง ส้ม เหลือง เขียว น้ำเงิน คราม ม่วง"
+ปรากฏการณ์เดียวกันนี้ทำให้เกิดรุ้งกินน้ำ!
+
+คำตอบคือ แสงแยกเป็นสีรุ้ง 7 สี`
+    },
+    {
+        type: 'choice',
+        text: 'ข้อใดเป็นสัตว์เลือดเย็น?',
+        options: ['นกเพนกวิน', 'ปลาฉลาม', 'วาฬ', 'ค้างคาว'],
+        correct: 1,
+        explanation: `สัตว์เลือดเย็น = อุณหภูมิร่างกายเปลี่ยนตามสิ่งแวดล้อม
+สัตว์เลือดอุ่น = รักษาอุณหภูมิร่างกายคงที่ได้
+
+สัตว์เลือดเย็น:
+• ปลา (รวมฉลาม) ✓ ← คำตอบ!
+• สัตว์เลื้อยคลาน (งู จระเข้ จิ้งจก)
+• สัตว์สะเทินน้ำสะเทินบก (กบ)
+
+สัตว์เลือดอุ่น:
+• นกเพนกวิน ✗ → เป็นนก (สัตว์เลือดอุ่น)
+• วาฬ ✗ → เป็นสัตว์เลี้ยงลูกด้วยนม (อยู่ในน้ำแต่เลือดอุ่น!)
+• ค้างคาว ✗ → เป็นสัตว์เลี้ยงลูกด้วยนม (บินได้แต่ไม่ใช่นก!)
+
+คำตอบคือ ปลาฉลาม`
+    },
+    {
+        type: 'choice',
+        text: 'หินอัคนี เกิดจากกระบวนการใด?',
+        options: [
+            'การทับถมของตะกอน',
+            'แมกมาหรือลาวาเย็นตัวลง',
+            'แรงดันและความร้อนใต้พื้นโลก',
+            'การสึกกร่อนของหิน'
+        ],
+        correct: 1,
+        explanation: `หินมี 3 ประเภท:
+
+1. หินอัคนี (Igneous Rock) ← คำตอบ!
+   → เกิดจากแมกมา/ลาวาเย็นตัวและแข็งตัว
+   → ตัวอย่าง: หินแกรนิต (เย็นตัวช้าใต้ดิน), หินบะซอลต์ (ลาวาเย็นตัวเร็ว)
+
+2. หินตะกอน (Sedimentary Rock)
+   → เกิดจากการทับถมของตะกอน เช่น ทราย ดิน เป็นชั้นๆ
+   → ตัวอย่าง: หินทราย หินปูน
+
+3. หินแปร (Metamorphic Rock)
+   → เกิดจากหินเดิมถูกแรงดันและความร้อนสูงจนเปลี่ยนรูป
+   → ตัวอย่าง: หินอ่อน หินชนวน
+
+คำตอบคือ แมกมาหรือลาวาเย็นตัวลง`
+    },
+    {
+        type: 'choice',
+        text: 'ระบบย่อยอาหาร อวัยวะใดทำหน้าที่ดูดซึมสารอาหารเป็นหลัก?',
+        options: ['กระเพาะอาหาร', 'ลำไส้เล็ก', 'ลำไส้ใหญ่', 'หลอดอาหาร'],
+        correct: 1,
+        explanation: `ลำดับการย่อยอาหาร:
+
+1. ปาก → เคี้ยว + น้ำลายย่อยแป้ง
+2. หลอดอาหาร → ส่งอาหารลงกระเพาะ
+3. กระเพาะอาหาร → ย่อยโปรตีนด้วยกรด
+4. ลำไส้เล็ก → ดูดซึมสารอาหาร ← คำตอบ!
+5. ลำไส้ใหญ่ → ดูดซึมน้ำ
+
+ทำไมลำไส้เล็กดูดซึมได้ดี?
+• ยาวมาก (6-7 เมตร!) → มีพื้นที่มาก
+• มีวิลลัส (Villi) = ปุ่มเล็กๆ จำนวนมากบนผนัง
+• ทำให้พื้นที่ดูดซึมรวมกว้างเท่าสนามเทนนิส!
+
+คำตอบคือ ลำไส้เล็ก`
+    },
+    {
+        type: 'choice',
+        text: 'ข้อใดถูกต้องเกี่ยวกับแรงเสียดทาน?',
+        options: [
+            'แรงเสียดทานทำให้วัตถุเคลื่อนที่เร็วขึ้น',
+            'แรงเสียดทานมีทิศทางเดียวกับการเคลื่อนที่',
+            'แรงเสียดทานต้านการเคลื่อนที่ของวัตถุ',
+            'แรงเสียดทานเกิดขึ้นเฉพาะในน้ำ'
+        ],
+        correct: 2,
+        explanation: `แรงเสียดทาน คือ แรงที่ต้านการเคลื่อนที่ของวัตถุ
+
+คุณสมบัติ:
+• มีทิศทางตรงข้ามกับการเคลื่อนที่
+• ทำให้วัตถุเคลื่อนที่ช้าลงหรือหยุด
+• เกิดได้ทั้งบนบก ในน้ำ และในอากาศ
+
+ตัวอย่างในชีวิตจริง:
+• ถ้าไม่มีแรงเสียดทาน → รองเท้าจะลื่น เดินไม่ได้
+• เบรกรถ → ใช้แรงเสียดทานหยุดรถ
+• ถูมือให้ร้อน → แรงเสียดทานเปลี่ยนเป็นความร้อน
+
+คำตอบคือ แรงเสียดทานต้านการเคลื่อนที่ของวัตถุ`
+    },
+    {
+        type: 'choice',
+        text: 'การเจริญเติบโตของพืชจากเมล็ด สิ่งแรกที่งอกออกมาคืออะไร?',
+        options: ['ใบ', 'ลำต้น', 'ราก', 'ดอก'],
+        correct: 2,
+        explanation: `การงอกของเมล็ดพืช (Germination):
+
+ลำดับการงอก:
+1. ราก → งอกออกมาก่อน! ← คำตอบ!
+   เพราะต้องยึดเกาะดินและดูดน้ำ-แร่ธาตุ
+
+2. ลำต้น → งอกขึ้นมาเหนือดิน
+
+3. ใบเลี้ยง → คลี่ออก (ใบแรกที่เห็น อาจไม่ใช่ใบจริง)
+
+4. ใบจริง → เริ่มสังเคราะห์ด้วยแสงได้
+
+5. ดอก → ออกเมื่อพืชโตเต็มที่
+
+เปรียบเทียบง่ายๆ: เหมือนสร้างบ้าน ต้องทำฐานราก (ราก) ก่อน แล้วค่อยสร้างตัวบ้าน (ลำต้น) และหลังคา (ใบ)
+
+คำตอบคือ ราก`
+    },
+    {
+        type: 'choice',
+        text: 'สสารในสถานะใดมีรูปร่างและปริมาตรไม่คงที่?',
+        options: ['ของแข็ง', 'ของเหลว', 'แก๊ส', 'พลาสมา'],
+        correct: 2,
+        explanation: `สถานะของสสาร:
+
+ของแข็ง:
+• รูปร่างคงที่ ✓
+• ปริมาตรคงที่ ✓
+• อนุภาคเรียงตัวแน่น แทบไม่เคลื่อนที่
+• ตัวอย่าง: หิน ไม้ เหล็ก
+
+ของเหลว:
+• รูปร่างไม่คงที่ ✗ (เปลี่ยนตามภาชนะ)
+• ปริมาตรคงที่ ✓
+• ตัวอย่าง: น้ำ น้ำมัน นม
+
+แก๊ส: ← คำตอบ!
+• รูปร่างไม่คงที่ ✗
+• ปริมาตรไม่คงที่ ✗ (ฟุ้งกระจายเต็มภาชนะ)
+• อนุภาคอยู่ห่างกัน เคลื่อนที่อิสระ
+• ตัวอย่าง: อากาศ ไอน้ำ
+
+คำตอบคือ แก๊ส`
+    },
+    {
+        type: 'choice',
+        text: 'ข้อใดเป็นการถ่ายทอดพลังงานที่ถูกต้อง?',
+        options: [
+            'พลังงานแสง → พลังงานเสียง → พลังงานความร้อน',
+            'พลังงานไฟฟ้า → พลังงานแสง → พลังงานความร้อน',
+            'พลังงานเสียง → พลังงานไฟฟ้า → พลังงานนิวเคลียร์',
+            'พลังงานความร้อน → พลังงานแสง → พลังงานเสียง'
+        ],
+        correct: 1,
+        explanation: `พลังงานสามารถเปลี่ยนรูปได้ แต่ต้องสมเหตุสมผล
+
+ตัวอย่างที่ถูก:
+พลังงานไฟฟ้า → พลังงานแสง → พลังงานความร้อน ✓
+
+อธิบาย: หลอดไฟ
+• กดสวิตช์ → ไฟฟ้าไหลเข้าหลอดไฟ (พลังงานไฟฟ้า)
+• หลอดไฟสว่าง (เปลี่ยนเป็นพลังงานแสง)
+• หลอดไฟร้อน (เปลี่ยนเป็นพลังงานความร้อน)
+
+กฎสำคัญ: พลังงานไม่สูญหาย แต่เปลี่ยนรูปได้
+(กฎการอนุรักษ์พลังงาน)
+
+คำตอบคือ พลังงานไฟฟ้า → พลังงานแสง → พลังงานความร้อน`
+    }
+];
+
+// ========================
+// GAME STATE
+// ========================
+let currentSubject = '';
+let currentQuestions = [];
+let currentQ = 0;
+let score = 0;
+let streak = 0;
+let totalXP = 0;
+let results = [];
+let answered = false;
+
+// ========================
+// NAVIGATION
+// ========================
+function goHome() {
+    document.getElementById('subjectSelect').classList.remove('hidden');
+    document.getElementById('quizArea').classList.add('hidden');
+    document.getElementById('topNav').className = 'top-nav';
+    currentSubject = '';
+}
+
+function startQuiz(subject) {
+    currentSubject = subject;
+    currentQ = 0;
+    score = 0;
+    streak = 0;
+    totalXP = 0;
+    answered = false;
+
+    if (subject === 'math') {
+        currentQuestions = mathQuestions;
+        document.getElementById('quizTitle').textContent = '🧮 คณิตศาสตร์';
+        document.getElementById('quizSubtitle').textContent = 'แนวข้อสอบเข้า ม.1 - 20 ข้อ';
+        document.getElementById('topNav').className = 'top-nav math-theme';
+    } else {
+        currentQuestions = scienceQuestions;
+        document.getElementById('quizTitle').textContent = '🔬 วิทยาศาสตร์';
+        document.getElementById('quizSubtitle').textContent = 'แนวข้อสอบเข้า ม.1 - 20 ข้อ';
+        document.getElementById('topNav').className = 'top-nav sci-theme';
+    }
+
+    results = new Array(currentQuestions.length).fill(null);
+
+    document.getElementById('subjectSelect').classList.add('hidden');
+    document.getElementById('quizArea').classList.remove('hidden');
+    document.getElementById('resultScreen').classList.remove('show');
+    document.getElementById('questionArea').classList.remove('hidden');
+    document.getElementById('progressSection').classList.remove('hidden');
+
+    renderProgressDots();
+    loadQuestion(0);
+}
+
+// ========================
+// PROGRESS
+// ========================
+function renderProgressDots() {
+    const container = document.getElementById('progressDots');
+    container.innerHTML = '';
+    for (let i = 0; i < currentQuestions.length; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'progress-dot' + (i === 0 ? ' current' : '');
+        dot.textContent = i + 1;
+        dot.id = 'dot-' + i;
+        container.appendChild(dot);
+    }
+}
+
+function updateProgress() {
+    const done = results.filter(r => r !== null).length;
+    const pct = (done / currentQuestions.length) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+
+    results.forEach((r, i) => {
+        const dot = document.getElementById('dot-' + i);
+        if (!dot) return;
+        dot.className = 'progress-dot';
+        if (r === 'correct') dot.classList.add('correct');
+        else if (r === 'incorrect') dot.classList.add('incorrect');
+        if (i === currentQ && r === null) dot.classList.add('current');
+    });
+
+    const correctCount = results.filter(r => r === 'correct').length;
+    score = Math.round((correctCount / currentQuestions.length) * 100);
+    document.getElementById('scoreDisplay').textContent = score;
+    document.getElementById('streakCount').textContent = streak;
+    document.getElementById('xpCount').textContent = totalXP + ' XP';
+}
+
+// ========================
+// LOAD QUESTION
+// ========================
+function loadQuestion(index) {
+    answered = false;
+    const q = currentQuestions[index];
+    const card = document.getElementById('questionCard');
+
+    let html = `
+        <div class="question-number">📝 ข้อที่ ${index + 1} จาก ${currentQuestions.length}</div>
+        <div class="question-text">${q.text}</div>
+    `;
+
+    if (q.math) {
+        html += `<div class="question-math">${q.math}</div>`;
+    }
+
+    if (q.type === 'choice') {
+        html += '<div class="options-grid">';
+        const letters = ['ก', 'ข', 'ค', 'ง'];
+        q.options.forEach((opt, i) => {
+            html += `
+                <button class="option-btn" onclick="selectOption(${i})" id="opt-${i}">
+                    <span class="option-letter">${letters[i]}</span>
+                    <span>${opt}</span>
+                </button>
+            `;
+        });
+        html += '</div>';
+    } else {
+        html += `
+            <div class="input-answer-area">
+                <input type="text" class="answer-input" id="answerInput"
+                    placeholder="?" autocomplete="off" inputmode="decimal"
+                    onkeydown="if(event.key==='Enter') checkInputAnswer()">
+                <button class="submit-btn" onclick="checkInputAnswer()">ตรวจคำตอบ ✓</button>
+            </div>
+        `;
+    }
+
+    card.innerHTML = html;
+
+    const fb = document.getElementById('feedbackArea');
+    fb.className = 'feedback-area';
+    fb.style.display = 'none';
+    document.getElementById('explanationArea').className = 'explanation';
+
+    updateProgress();
+
+    if (q.type === 'input') {
+        setTimeout(() => {
+            const inp = document.getElementById('answerInput');
+            if (inp) inp.focus();
+        }, 200);
+    }
+}
+
+// ========================
+// ANSWER HANDLERS
+// ========================
+function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    playClickSound();
+
+    const q = currentQuestions[currentQ];
+    const isCorrect = idx === q.correct;
+
+    q.options.forEach((_, i) => {
+        document.getElementById('opt-' + i).classList.add('disabled');
+    });
+
+    if (isCorrect) {
+        document.getElementById('opt-' + idx).classList.add('correct');
+        handleCorrect();
+    } else {
+        document.getElementById('opt-' + idx).classList.add('incorrect');
+        setTimeout(() => {
+            document.getElementById('opt-' + q.correct).classList.add('show-correct');
+        }, 400);
+        handleIncorrect(q);
+    }
+}
+
+function checkInputAnswer() {
+    if (answered) return;
+    const input = document.getElementById('answerInput');
+    const val = input.value.trim();
+    if (!val) return;
+
+    answered = true;
+    playClickSound();
+
+    const q = currentQuestions[currentQ];
+    const isCorrect = val === q.answer;
+
+    input.disabled = true;
+    document.querySelector('.submit-btn').disabled = true;
+
+    if (isCorrect) {
+        input.classList.add('correct');
+        handleCorrect();
+    } else {
+        input.classList.add('incorrect');
+        handleIncorrect(q);
+    }
+}
+
+function handleCorrect() {
+    results[currentQ] = 'correct';
+    streak++;
+    const xpGain = 10 + (streak >= 3 ? 5 : 0);
+    totalXP += xpGain;
+    playCorrectSound();
+    showFeedback(true, `ถูกต้อง! +${xpGain} XP`, getEncouragement());
+    if (streak === 3 || streak === 5 || streak === 7 || streak === 10) {
+        setTimeout(() => showStreak(streak), 600);
+    }
+    // Always show explanation on correct too
+    const expArea = document.getElementById('explanationArea');
+    document.getElementById('explanationText').textContent = currentQuestions[currentQ].explanation;
+    setTimeout(() => expArea.classList.add('show'), 300);
+    updateProgress();
+}
+
+function handleIncorrect(q) {
+    results[currentQ] = 'incorrect';
+    streak = 0;
+    playIncorrectSound();
+    showFeedback(false, 'ไม่ถูกต้อง', `คำตอบที่ถูกคือ: ${q.answer || q.options[q.correct]}`);
+    const expArea = document.getElementById('explanationArea');
+    document.getElementById('explanationText').textContent = q.explanation;
+    setTimeout(() => expArea.classList.add('show'), 500);
+    updateProgress();
+}
+
+function showFeedback(isCorrect, title, desc) {
+    const fb = document.getElementById('feedbackArea');
+    fb.className = 'feedback-area show ' + (isCorrect ? 'correct' : 'incorrect');
+    fb.style.display = 'flex';
+    document.getElementById('feedbackIcon').textContent = isCorrect ? '🎉' : '😢';
+    document.getElementById('feedbackTitle').textContent = title;
+    document.getElementById('feedbackDesc').textContent = desc;
+}
+
+function getEncouragement() {
+    const msgs = ['เก่งมาก!', 'สุดยอด!', 'ถูกต้อง!', 'ดีมาก!', 'เยี่ยมไปเลย!', 'แม่นมาก!', 'อัจฉริยะ!'];
+    return msgs[Math.floor(Math.random() * msgs.length)];
+}
+
+// ========================
+// NAVIGATION
+// ========================
+function nextQuestion() {
+    currentQ++;
+    if (currentQ >= currentQuestions.length) {
+        showResults();
+    } else {
+        loadQuestion(currentQ);
+    }
+}
+
+// ========================
+// STREAK POPUP
+// ========================
+function showStreak(count) {
+    playStreakSound();
+    const popup = document.getElementById('streakPopup');
+    popup.textContent = `🔥 ตอบถูกติดต่อกัน ${count} ข้อ!`;
+    popup.classList.add('show');
+    setTimeout(() => popup.classList.remove('show'), 2000);
+}
+
+// ========================
+// CONFETTI
+// ========================
+function launchConfetti() {
+    const container = document.getElementById('confettiContainer');
+    const colors = ['#f43f5e', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#06b6d4'];
+    for (let i = 0; i < 80; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti';
+        el.style.left = Math.random() * 100 + '%';
+        el.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        el.style.animationDelay = Math.random() * 1.5 + 's';
+        el.style.animationDuration = (2 + Math.random() * 2) + 's';
+        el.style.width = (6 + Math.random() * 8) + 'px';
+        el.style.height = (6 + Math.random() * 8) + 'px';
+        el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        el.style.transform = `rotate(${Math.random() * 360}deg)`;
+        container.appendChild(el);
+    }
+    setTimeout(() => container.innerHTML = '', 4000);
+}
+
+// ========================
+// RESULTS
+// ========================
+function showResults() {
+    playCompleteSound();
+    launchConfetti();
+
+    document.getElementById('questionArea').classList.add('hidden');
+    document.getElementById('progressSection').classList.add('hidden');
+
+    const screen = document.getElementById('resultScreen');
+    screen.classList.add('show');
+
+    const correct = results.filter(r => r === 'correct').length;
+    const accuracy = Math.round((correct / currentQuestions.length) * 100);
+
+    document.getElementById('resultCorrect').textContent = correct + '/' + currentQuestions.length;
+    document.getElementById('resultXP').textContent = totalXP;
+    document.getElementById('resultAccuracy').textContent = accuracy + '%';
+
+    let stars = '';
+    if (accuracy >= 90) stars = '⭐⭐⭐';
+    else if (accuracy >= 70) stars = '⭐⭐';
+    else if (accuracy >= 50) stars = '⭐';
+    else stars = '💪';
+    document.getElementById('resultStars').textContent = stars;
+
+    if (accuracy === 100) {
+        document.getElementById('resultTrophy').textContent = '👑';
+        document.getElementById('resultTitle').textContent = 'สมบูรณ์แบบ!';
+        document.getElementById('resultSubtitle').textContent = 'ตอบถูกทุกข้อ! เก่งมากๆ เลย';
+    } else if (accuracy >= 80) {
+        document.getElementById('resultTrophy').textContent = '🏆';
+        document.getElementById('resultTitle').textContent = 'ยอดเยี่ยม!';
+        document.getElementById('resultSubtitle').textContent = 'ทำได้ดีมาก ฝึกต่อไปนะ';
+    } else if (accuracy >= 60) {
+        document.getElementById('resultTrophy').textContent = '🎯';
+        document.getElementById('resultTitle').textContent = 'ดีมาก!';
+        document.getElementById('resultSubtitle').textContent = 'พัฒนาได้อีก ลองทำใหม่นะ';
+    } else {
+        document.getElementById('resultTrophy').textContent = '💪';
+        document.getElementById('resultTitle').textContent = 'สู้ๆ นะ!';
+        document.getElementById('resultSubtitle').textContent = 'ลองฝึกอีกครั้ง จะทำได้ดีขึ้นแน่นอน';
+    }
+}
+
+function restartQuiz() {
+    startQuiz(currentSubject);
+}
+
+// ========================
+// KEYBOARD SHORTCUTS
+// ========================
+document.addEventListener('keydown', (e) => {
+    if (answered && e.key === 'Enter') { nextQuestion(); return; }
+    if (!currentQuestions.length) return;
+    const q = currentQuestions[currentQ];
+    if (q && q.type === 'choice' && !answered) {
+        const map = { '1': 0, '2': 1, '3': 2, '4': 3 };
+        if (map[e.key] !== undefined) selectOption(map[e.key]);
+    }
+});
+</script>
+
+</body>
+</html>
